@@ -3,14 +3,14 @@ from ultralytics import YOLO,checks
 import math
 import time
 import angle
-#
-#from outlet import outlt
+
 import sys
 import detect
 from threading import Thread
 import time
-import control
+
 import simulate
+import servo
 print()
 print(f"""
 
@@ -65,7 +65,7 @@ def perform_object_detection():
  
                     confidence = math.ceil((box.conf[0] * 100)) / 100 
                     if confidence>0.5:           
-                        cv2.rectangle(img, (x1, y1), (x2, y2), (0,165,255), 2) 
+                        cv2.rectangle(img, (x1, y1), (x2, y2), (0,165,255), 1) 
                         text = f"{class_name} ({confidence})"
                         cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
                         cx = (x1 + x2) // 2
@@ -97,20 +97,45 @@ def perform_object_detection():
 
 
 def arm(x,cx,cy):
-    time.sleep(3)
+    time.sleep(2)
 
     ba=angle.calculate_angle(50,140,50,0,cx,cy)
     p = [50, 140]
     q = [cx, cy]
 
     vdist=math.dist(p, q)
+    
     print (vdist)
+    """
 
-    rdist=vdist/7#.40537210974
+    198.4263087395419/20 = 9.92131543698
+    251.2409202339459/25 = 10.0496368094
+    142.28492541376264/15 = 9.48566169425
+    so avg -= 10
+    
+    """ 
+    rdist=vdist/10#.40537210974
+    if rdist <= 5:
+        print("two short")
+        global y
+        time.sleep(4)
+        y=4
     print(f"found at {cx} {cy} at angle {ba} for distance {rdist}")
     print("============= 𝕀𝕟𝕚𝕥𝕚𝕒𝕝𝕚𝕫𝕚𝕟𝕘 PICK UP PROCESS =============")
     print(f"INITIATED picK uP a oBJECT aT x:{cx} y:{cy} \n distance :{vdist} /// {rdist} cm \n base angle is {ba}")
 
-    simulate.plot_triangle(10,13,rdist)
+    angles=simulate.plot_triangle(11,16,rdist)
+    print(f"ANGLES {angles}")
+    servo.gripper(60)
+    time.sleep(0.45)
+    servo.base_turn(ba)
+    time.sleep(0.5)
+    servo.shoulder(angles[1])
+    time.sleep(0.5)
+    servo.gripper(120)
+    
+    servo.elbow(angles[0])
+    
+
 if __name__ == '__main__':
     Thread(target=perform_object_detection).start()

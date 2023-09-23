@@ -1,5 +1,13 @@
 import math
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from datetime import datetime
+
+
+timestamp=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+filename = f'my_plot_{timestamp}.png'
+
 
 def find_angles(side_a, side_b, side_c):
     # Calculate the angles using the law of cosines
@@ -9,7 +17,8 @@ def find_angles(side_a, side_b, side_c):
     
     return angle_a, angle_b, angle_c
 
-def plot_triangle(side_a, side_b, side_c):
+def plot_triangle(side_a=11, side_b=16, side_c=14):
+    print(side_a,side_b,side_c)
     angles = find_angles(side_a, side_b, side_c)
     
     # Create a list of vertices (x, y) for the triangle
@@ -35,7 +44,8 @@ def plot_triangle(side_a, side_b, side_c):
     plt.ylabel('Y-axis')
 
     # Display the plot
-    plt.show()
+    plt.savefig(filename)
+    return angles
 
 
 

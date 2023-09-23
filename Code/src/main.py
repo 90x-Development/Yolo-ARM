@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO,checks
 import math
 import time
-from outlet import outlt
+#from outlet import outlt
 import sys
 import detect
 

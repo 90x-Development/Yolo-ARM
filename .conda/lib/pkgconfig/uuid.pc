@@ -1,0 +1,11 @@
+prefix=/home/gokul/Desktop/Yolo-ARM/.conda
+exec_prefix=/home/gokul/Desktop/Yolo-ARM/.conda
+libdir=/home/gokul/Desktop/Yolo-ARM/.conda/lib
+includedir=/home/gokul/Desktop/Yolo-ARM/.conda/include
+
+Name: uuid
+Description: Universally unique id library
+Version: 2.32.1
+Requires:
+Cflags: -I${includedir}/uuid
+Libs: -L${libdir} -luuid
